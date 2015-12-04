@@ -169,7 +169,7 @@ public class StudentServiceImplTest {
         studentReport.setStudent(student);
         studentReport.getEnrolmentMap().put(2558,sortedCourseEnrolment);
         studentReport.getGpaMap().put(2558,4.0);
-
+        when(courseEnrolmentDao.getCourseEnrolments(student)).thenReturn(Arrays.asList(courseEnrolment,courseEnrolment2));
 //        when(studentService.getRegisterYear(sortedCourseEnrolment)).thenReturn(Arrays.asList(2557,2558));
 
         assertThat(studentService.getStudentReport(student),is(studentReport));
@@ -231,5 +231,12 @@ public class StudentServiceImplTest {
         Student testStudent = mock(Student.class);
         when(testStudent.getCourseEnrolments()).thenReturn(Arrays.asList());
         assertThat(studentService.getStudentGpa(testStudent,2558),is(0.0));
+    }
+
+    @Test
+    public void testGetRegisterYear() throws Exception {
+        assertThat(studentService.getRegisterYear(Arrays.asList(courseEnrolment,courseEnrolment2)),is(Arrays.asList(2558)));
+        verify(openedCourse,times(1)).getAcademicYear();
+        verify(openedCourse2,times(1)).getAcademicYear();
     }
 }
